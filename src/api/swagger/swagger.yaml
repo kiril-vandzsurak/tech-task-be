@@ -1,0 +1,133 @@
+swagger: "2.0"
+info:
+  title: CRUD API
+  description: A simple CRUD API built with Express and Mongoose
+  version: "1.0.0"
+host: localhost:3000
+basePath: /
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /getAll:
+    get:
+      description: Get all CRUD elements
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/CrudModel"
+        500:
+          description: Internal Server Error
+
+  /getSingle/{id}:
+    get:
+      description: Get a single CRUD element by ID
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the CRUD element to retrieve
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/CrudModel"
+        404:
+          description: Not Found
+        500:
+          description: Internal Server Error
+
+  /update/{id}:
+    put:
+      description: Update a single CRUD element by ID
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the CRUD element to update
+          required: true
+          type: string
+        - name: element
+          in: body
+          description: The updated CRUD element
+          required: true
+          schema:
+            $ref: "#/definitions/CrudModel"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/CrudModel"
+        400:
+          description: Bad Request
+        404:
+          description: Not Found
+        500:
+          description: Internal Server Error
+
+  /delete/{id}:
+    delete:
+      description: Delete a single CRUD element by ID
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the CRUD element to delete
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        404:
+          description: Not Found
+        500:
+          description: Internal Server Error
+
+  /post:
+    post:
+      description: Create a new CRUD element
+      parameters:
+        - name: element
+          in: body
+          description: The CRUD element to create
+          required: true
+          schema:
+            $ref: "#/definitions/CrudModel"
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: "#/definitions/CrudModel"
+        400:
+          description: Bad Request
+        500:
+          description: Internal Server Error
+
+definitions:
+  CrudModel:
+    type: object
+    required:
+      - _id
+      - name
+      - description
+      - price
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      price:
+        type: number
